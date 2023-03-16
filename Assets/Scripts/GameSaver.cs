@@ -10,7 +10,6 @@ public class GameSaver : MonoBehaviour
     
     public string playerName;
     public string bestPlayerName;
-    public int playerScore;
     public int bestPlayerScore;
 
     //[SerializeField] GameObject playerNameInput;

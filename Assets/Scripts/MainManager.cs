@@ -47,14 +47,11 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
-        
-        if (GameSaver.Instance.bestPlayerScore > 0)
+
+        if (bestPoints > 0)
         {
-            bestScoreText.text =
-                $"Best Score : {GameSaver.Instance.bestPlayerName} : {GameSaver.Instance.bestPlayerScore}";
-            Debug.Log(GameSaver.Instance.bestPlayerName);
+            ShowBestScore();
         }
-        
     }
 
     private void Update()
@@ -91,9 +88,7 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
-        bestScoreText.text = $"Best Score : {GameSaver.Instance.playerName} : {DetermBestScore(m_Points, bestPoints)}";
-        GameSaver.Instance.SaveBestPlayerData(GameSaver.Instance.playerName, DetermBestScore(m_Points, bestPoints));
-
+        ShowBestScore();
     }
 
     public void BackToMenu()
@@ -105,18 +100,22 @@ public class MainManager : MonoBehaviour
     {
         if (currentPlayerScore > bestPlayerScore)
         {
-            bestPlayerScore = currentPlayerScore;
+            GameSaver.Instance.bestPlayerName = GameSaver.Instance.playerName;
         }
-        return "fuck";
+        return GameSaver.Instance.bestPlayerName;
     }
 
     public int DetermBestScore(int currentPlayerScore, int bestPlayerScore)
     {
         if (currentPlayerScore > bestPlayerScore)
         {
-            bestPlayerScore = currentPlayerScore;
+            GameSaver.Instance.bestPlayerScore = m_Points;
         }
+        return GameSaver.Instance.bestPlayerScore;
+    }
 
-        return bestPlayerScore;
+    public void ShowBestScore()
+    {
+        bestScoreText.text = $"Best Score : {DetermBestPlayer(m_Points, bestPoints)} : {DetermBestScore(m_Points, bestPoints)}";
     }
 }

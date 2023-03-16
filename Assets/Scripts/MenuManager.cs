@@ -20,7 +20,7 @@ public class MenuManager : MonoBehaviour
         
         if (GameSaver.Instance.bestPlayerScore > 0)
         {
-            bestPlayerText.GetComponent<TextMeshProUGUI>().text = $"Best score: {GameSaver.Instance.bestPlayerName} : {GameSaver.Instance.bestPlayerScore}";
+            bestPlayerText.GetComponent<TextMeshProUGUI>().text = $"Best score : {GameSaver.Instance.bestPlayerName} : {GameSaver.Instance.bestPlayerScore}";
             bestPlayerText.SetActive(true);
         }
     }
