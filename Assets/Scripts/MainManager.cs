@@ -1,8 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class MainManager : MonoBehaviour
 {
@@ -14,9 +18,14 @@ public class MainManager : MonoBehaviour
     public GameObject GameOverText;
     
     private bool m_Started = false;
-    private int m_Points;
+    public int m_Points;
+    private int bestPoints = 2;
     
     private bool m_GameOver = false;
+
+    [SerializeField] private Text bestScoreText;
+
+    public static MainManager Instance;
 
     
     // Start is called before the first frame update
@@ -36,6 +45,17 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        if (GameSaver.Instance.bestPlayerName == null)
+        {
+            bestScoreText.text = "Best Score : Name : 0";
+        }
+        else
+        {
+            bestScoreText.text =
+                $"Best Score : {GameSaver.Instance.bestPlayerName} : {GameSaver.Instance.bestPlayerScore}";
+        }
+        
     }
 
     private void Update()
@@ -57,7 +77,7 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene((int)SceneName.Main);
             }
         }
     }
@@ -72,5 +92,16 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        if (m_Points > bestPoints)
+        {
+            bestScoreText.text = $"Best Score : {GameSaver.Instance.playerName} : {m_Points}";
+            GameSaver.Instance.SaveBestPlayerData(GameSaver.Instance.playerName, m_Points);
+        }
+
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene((int)SceneName.Menu);
     }
 }
