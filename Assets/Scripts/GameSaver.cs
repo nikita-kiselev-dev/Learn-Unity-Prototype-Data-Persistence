@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +12,6 @@ public class GameSaver : MonoBehaviour
     public string playerName;
     public string bestPlayerName;
     public int bestPlayerScore;
-
-    //[SerializeField] GameObject playerNameInput;
     
 
     
@@ -27,37 +26,46 @@ public class GameSaver : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
-    public void SaveBestPlayerData(string playerName, int playerScore)
+    
+    public void SavePlayerName(string playerNameFromMenuManager)
     {
-        bestPlayerName = playerName;
-        bestPlayerScore = playerScore;
-        Debug.Log($"Best Player: {bestPlayerName} / Best Score: {bestPlayerScore}");
+        playerName = playerNameFromMenuManager;
     }
     
     [System.Serializable]
     class SaveData
     {
+        public int bestPlayerScore;
+        public string bestPlayerName;
+        public string lastPlayerName;
     }
 
-    public void SavePlayerScore()
+    public void SavePlayerData()
     {
+        string path = Application.persistentDataPath + "/savefile.json";
         SaveData data = new SaveData();
+        data.bestPlayerScore = bestPlayerScore;
+        data.bestPlayerName = bestPlayerName;
+        data.lastPlayerName = playerName;
         
+        string json = JsonUtility.ToJson(data);
+        
+        File.WriteAllText(path, json);
     }
 
-    public void SavePlayerName(string playerNameFromMenuManager)
-    {
-        playerName = playerNameFromMenuManager;
-    }
 
-    public void DataLoad()
+
+    public void LoadPlayerData()
     {
         string path = Application.persistentDataPath + "/savefile.json";
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            bestPlayerScore = data.bestPlayerScore;
+            bestPlayerName = data.bestPlayerName;
+            playerName = data.lastPlayerName;
         }
     }
 

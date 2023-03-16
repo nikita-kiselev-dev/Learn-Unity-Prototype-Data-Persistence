@@ -89,10 +89,12 @@ public class MainManager : MonoBehaviour
         m_GameOver = true;
         GameOverText.SetActive(true);
         ShowBestScore();
+        GameSaver.Instance.SavePlayerData();
     }
 
     public void BackToMenu()
     {
+        GameSaver.Instance.SavePlayerData();
         SceneManager.LoadScene((int)SceneName.Menu);
     }
 

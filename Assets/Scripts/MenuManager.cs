@@ -16,8 +16,10 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        playerNameInput.GetComponent<TMP_InputField>().text = GameSaver.Instance.playerName;
+        GameSaver.Instance.LoadPlayerData();
         
+        playerNameInput.GetComponent<TMP_InputField>().text = GameSaver.Instance.playerName;
+
         if (GameSaver.Instance.bestPlayerScore > 0)
         {
             bestPlayerText.GetComponent<TextMeshProUGUI>().text = $"Best score : {GameSaver.Instance.bestPlayerName} : {GameSaver.Instance.bestPlayerScore}";
@@ -39,6 +41,8 @@ public class MenuManager : MonoBehaviour
     
     public void Exit()
     {
+        GameSaver.Instance.SavePlayerData();
+        
         #if UNITY_EDITOR
             EditorApplication.ExitPlaymode();
         #else
