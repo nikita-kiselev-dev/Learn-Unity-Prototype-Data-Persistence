@@ -10,9 +10,31 @@ public class MenuManager : MonoBehaviour
 {
     public string playerName;
     [SerializeField] GameObject playerNameInput;
+    
+    [SerializeField] GameObject bestPlayerText;
+    [SerializeField] GameObject pleaseEnterNameText;
+
+    private void Start()
+    {
+        playerNameInput.GetComponent<TMP_InputField>().text = GameSaver.Instance.playerName;
+        
+        if (GameSaver.Instance.bestPlayerScore > 0)
+        {
+            bestPlayerText.GetComponent<TextMeshProUGUI>().text = $"Best score: {GameSaver.Instance.bestPlayerName} : {GameSaver.Instance.bestPlayerScore}";
+            bestPlayerText.SetActive(true);
+        }
+    }
+
     public void StartGame()
     {
-        SceneManager.LoadScene((int)SceneName.Main);
+        if (playerNameInput.GetComponent<TMP_InputField>().text != "")
+        {
+            SceneManager.LoadScene((int)SceneName.Main);
+        }
+        else
+        {
+            pleaseEnterNameText.SetActive(true);
+        }
     }
     
     public void Exit()
@@ -22,5 +44,11 @@ public class MenuManager : MonoBehaviour
         #else
             Application.Quit();
         #endif
+    }
+
+    public void EnterPlayerName()
+    {
+        playerName = playerNameInput.GetComponent<TMP_InputField>().text;
+        GameSaver.Instance.SavePlayerName(playerName);
     }
 }

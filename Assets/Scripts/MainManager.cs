@@ -19,7 +19,7 @@ public class MainManager : MonoBehaviour
     
     private bool m_Started = false;
     public int m_Points;
-    private int bestPoints = 2;
+    private int bestPoints;
     
     private bool m_GameOver = false;
 
@@ -31,6 +31,8 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bestPoints = GameSaver.Instance.bestPlayerScore;
+        
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -45,15 +47,12 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
-
-        if (GameSaver.Instance.bestPlayerName == null)
-        {
-            bestScoreText.text = "Best Score : Name : 0";
-        }
-        else
+        
+        if (GameSaver.Instance.bestPlayerScore > 0)
         {
             bestScoreText.text =
                 $"Best Score : {GameSaver.Instance.bestPlayerName} : {GameSaver.Instance.bestPlayerScore}";
+            Debug.Log(GameSaver.Instance.bestPlayerName);
         }
         
     }
@@ -92,16 +91,32 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
-        if (m_Points > bestPoints)
-        {
-            bestScoreText.text = $"Best Score : {GameSaver.Instance.playerName} : {m_Points}";
-            GameSaver.Instance.SaveBestPlayerData(GameSaver.Instance.playerName, m_Points);
-        }
+        bestScoreText.text = $"Best Score : {GameSaver.Instance.playerName} : {DetermBestScore(m_Points, bestPoints)}";
+        GameSaver.Instance.SaveBestPlayerData(GameSaver.Instance.playerName, DetermBestScore(m_Points, bestPoints));
 
     }
 
     public void BackToMenu()
     {
         SceneManager.LoadScene((int)SceneName.Menu);
+    }
+
+    public string DetermBestPlayer(int currentPlayerScore, int bestPlayerScore)
+    {
+        if (currentPlayerScore > bestPlayerScore)
+        {
+            bestPlayerScore = currentPlayerScore;
+        }
+        return "fuck";
+    }
+
+    public int DetermBestScore(int currentPlayerScore, int bestPlayerScore)
+    {
+        if (currentPlayerScore > bestPlayerScore)
+        {
+            bestPlayerScore = currentPlayerScore;
+        }
+
+        return bestPlayerScore;
     }
 }

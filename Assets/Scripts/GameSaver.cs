@@ -13,7 +13,7 @@ public class GameSaver : MonoBehaviour
     public int playerScore;
     public int bestPlayerScore;
 
-    [SerializeField] GameObject playerNameInput;
+    //[SerializeField] GameObject playerNameInput;
     
 
     
@@ -47,10 +47,9 @@ public class GameSaver : MonoBehaviour
         
     }
 
-    public void EnterPlayerName()
+    public void SavePlayerName(string playerNameFromMenuManager)
     {
-        playerName = GameObject.Find("Player Name Input").GetComponent<TMP_InputField>().text;
-        Debug.Log(playerName);
+        playerName = playerNameFromMenuManager;
     }
 
     public void DataLoad()
